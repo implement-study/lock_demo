@@ -53,6 +53,7 @@ public class MyLock {
                 System.out.println(Thread.currentThread().getName() + "被唤醒之后，拿到锁");
                 return;
             }
+            LockSupport.park();
 
         }
 

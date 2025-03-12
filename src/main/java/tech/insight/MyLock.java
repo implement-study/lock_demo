@@ -61,7 +61,7 @@ public class MyLock {
 
     void unlock() {
         if (Thread.currentThread() != this.owner) {
-            throw new IllegalStateException("当前线程并没有锁，不能解锁");
+            throw new IllegalStateException("当前线程并没有锁，不能解锁"+Thread.currentThread().getName() + "owner" + owner.getName());
         }
         int i = state.get();
         if (i > 1) {
@@ -74,6 +74,7 @@ public class MyLock {
         }
         Node headNode = head.get();
         Node next = headNode.next;
+        owner = null;
         state.set(0);
         if (next != null) {
             System.out.println(Thread.currentThread().getName() + "唤醒了" + next.thread.getName());

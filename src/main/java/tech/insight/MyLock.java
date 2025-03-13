@@ -18,14 +18,28 @@ public class MyLock {
 
     AtomicReference<Node> tail = new AtomicReference<>(head.get());
 
+    private final boolean fair;
+
+    /**
+     * 默认为非公平锁
+     */
+    MyLock() {
+        this(false);
+    }
+
+    MyLock(boolean fair) {
+        this.fair = fair;
+    }
 
     void lock() {
-        if (state.get() == 0) {
-            if (state.compareAndSet(0, 1)) {
-                System.out.println(Thread.currentThread().getName() + "直接拿到锁");
-                owner = Thread.currentThread();
-                return;
-            }
+        if (!fair && state.get() == 0 && state.compareAndSet(0, 1)) {
+            System.out.println(Thread.currentThread().getName() + "直接拿到锁");
+            owner = Thread.currentThread();
+            return;
+        } else if (fair && head.get().next == null && state.compareAndSet(0, 1)) {
+            System.out.println(Thread.currentThread().getName() + "直接拿到锁");
+            owner = Thread.currentThread();
+            return;
         } else {
             if (owner == Thread.currentThread()) {
                 System.out.println(Thread.currentThread().getName() + " 拿到了重入锁,当前重入次数为" + state.incrementAndGet());

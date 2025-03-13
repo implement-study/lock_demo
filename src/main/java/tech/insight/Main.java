@@ -11,8 +11,8 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         int[] count = new int[]{1000};
         List<Thread> threads = new ArrayList<>();
-        MyLock lock = new MyLock();
-        for (int i = 0; i < 5; i++) {
+        MyLock lock = new MyLock(true);
+        for (int i = 0; i < 50; i++) {
             threads.add(new Thread(() -> {
                 for (int i1 = 0; i1 < 5; i1++) {
                     lock.lock();
